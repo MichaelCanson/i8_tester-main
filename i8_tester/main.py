@@ -1,93 +1,85 @@
+'''
+Copyright(c) 2023 Marquis Systems Inc.
+
+'''
 import sys
 import time
 from i2c_controller import Controller
-
-ORDERLY = 1
-RND = 2
+from binascii import hexlify 
+from random import choice, choices, randrange
+import i2c_defs
 
 
 def main():
     controller = Controller()
+         
+    if sys.argv[1] == '-n':
+        print("number of trials to run: ", sys.argv[2])    
+        trials = int(sys.argv[2])
     
-    # n = len(sys.argv)
-    # print("Total arguments passed:", n)
-    # print("\nArguments passed:", end = " ")
-
-    # for i in range(1, n):
-    #     print(sys.argv[i], end = " ")
-    #     print("\n")
-
-    # # if n != 3 and n != 5: 
-    #     # return 0
-        
-    # if sys.argv[1] == '-n':
-    #     print("number of trials to run: ", sys.argv[2])    
-    #     trials = int(sys.argv[2])
-    
-    # if sys.argv[3] == '-s':
-    #     if sys.argv[4]:
-    #         test_type = sys.argv[4]
-
-    # if sys.argv[5] == '-t':
-    #     if sys.argv[6] and sys.argv[7]:
-    #         active_delay = controller.set_open_delay[sys.argv[6],sys.argv[4]]
-    #         # active_dur = controller.set_open_delay[sys.argv[7],sys.argv[4]]
-            
-   
-    # sequence = controller.get_output_sequence(test_type)
+    test_type = i2c_defs.TESTS_TO_RUN[0]        
 # ---------------------------------------------------------------
-
-    # for addr_ix in range(len(controller.I8_PAIR_ADDR)):
-    for addr_ix in range(1):
-
-        controller.set_pcf_address(3)
-
-        for i in range(len(controller.I0_ADDR)):
-            
-            controller.word_reg[addr_ix][0] = 0xfd #controller.I0_ADDR[i]
-            controller.word_reg[addr_ix][1] = 0xff
-            controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
-            print('PCF ADDR {} Port {} enabled'
-                  .format(controller.I8_PAIR_ADDR[addr_ix],i))
-            time.sleep(1)
+    while trials:
+        if test_type == 0:
+            for addr_ix in range(len(i2c_defs.I8_PAIR_ADDR)):
+                controller.set_pcf_address(addr_ix)
         
-        for i in range(len(controller.I0_ADDR)):
-            controller.word_reg[addr_ix][0] = 0xff
-            controller.word_reg[addr_ix][1] = 0xfd
-            controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
-            print('PCF ADDR {} Port {} enabled'
-                  .format(controller.I8_PAIR_ADDR[addr_ix] ,8 + i))
-            time.sleep(1)
+                print('\n---- i8.{} Test ----'.format(addr_ix + 1))
+                for i in range(len(i2c_defs.I0_ADDR)):
+                    controller.word_reg[addr_ix][0] = i2c_defs.I0_ADDR[i]
+                    controller.word_reg[addr_ix][1] = i2c_defs.DISABLE_i8
+                    controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+                    print('PCF ADDR: 0x{0:X} Output: {1} enabled'
+                        .format(i2c_defs.I8_PAIR_ADDR[addr_ix],i))
+                    
+                    time.sleep(1)
 
-        controller.word_reg[addr_ix][0] = 0xff
-        controller.word_reg[addr_ix][1] = 0xff
+                print('\n---- i8.{} Test ----'.format(addr_ix + 2))
+                for i in range(len(i2c_defs.I0_ADDR)):
+                    controller.word_reg[addr_ix][0] = i2c_defs.DISABLE_i8
+                    controller.word_reg[addr_ix][1] = i2c_defs.I0_ADDR[i]
+                    controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+                    print('PCF ADDR: 0x{0:X} Output: {1} enabled'
+                        .format(i2c_defs.I8_PAIR_ADDR[addr_ix],10 + i))
+                    
+                    time.sleep(1)
+        elif test_type == 1:
+            i8_addr_1 = (choice(i2c_defs.I8_PAIR_ADDR), randrange(1))
+            i8_addr_2 = (choice(i2c_defs.I8_PAIR_ADDR), randrange(1))
+            out_addr_1 = choice(i2c_defs.I0_ADDR)
+            out_addr_2 = choice(i2c_defs.I0_ADDR)
+
+            #eliminate the same pins on the same board from being assigned
+            while out_addr_1 == out_addr_2:
+                out_addr_2 = choice(i2c_defs.I0_ADDR)
+
+            rand_i8_pair = [(i8_addr_1,out_addr_1),(i8_addr_2,out_addr_2)]
+
+            #set rand order of which of the pair is to be enabled first. 
+            rand_sequence = choices(rand_i8_pair)
+            while rand_sequence[0] == rand_sequence[1]:
+                rand_sequence = choices(rand_i8_pair)
+            
+            #TODO ^^ eliminates i8 boards to be selected that are paired in one pcf.
+            #set delay time
+            active_delay_1 = 0
+            active_dur_1 = randrange(3,8)
+
+            active_delay_2 = randrange(1,3)
+            active_dur_2 = randrange(3,8)
+
+
+
+        
+        #Reset
+        controller.word_reg[addr_ix][0] = i2c_defs.DISABLE_i8
+        controller.word_reg[addr_ix][1] = i2c_defs.DISABLE_i8
         controller.i2c.write(bytearray([controller.word_reg[addr_ix][0],\
-                                   controller.word_reg[addr_ix][1]]))
+                                controller.word_reg[addr_ix][1]]))
+            
 
-
+        trials -= 1
 #---------------------------------------------------------------
-
-
-    # #-------------- Start of test -------------------
-    # trials_count = trials
-    # while trials_count:    
-    #     for out in sequence:
-    #         controller.write(out)
-    #         time.sleep(active_dur)
-
-    #         disable_out = ~out
-    #         controller.write(disable_out)
-    #         time.sleep(active_delay)
-    
-
-
-    #     trials_count -= 1
-
-    # #------------- End of test ---------------------
-
-
-
-
 
 if __name__ == '__main__':
     sys.exit(main())
