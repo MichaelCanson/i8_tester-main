@@ -6,13 +6,14 @@ from datetime import date
 
 DISABLE_i8 = 0xff
 
-BUS_ADDR = 0x02
-I8_PAIR_ADDR =  [0x20,0x21,0x22,0x23] #PCF address with constant pcf value and LSB: R/W bit set to 1.
+BUS_ADDR = 0x01
+# I8_PAIR_ADDR =  [0x20,0x23,0x20,0x23] #PCF address with constant pcf value and LSB: R/W bit set to 1.
+I8_PAIR_ADDR =  [0x21,0x22]
 WORD_REG = [[0xff,0xff],[0xff,0xff],[0xff,0xff],[0xff,0xff]] 
 I0_ADDR = [0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f]
 
-ACTIVE_DELAY = 1
-ACTIVE_DURATION = 2
+ACTIVE_DELAY = 5
+ACTIVE_DURATION = 10
 SEQ = 0
 RAND_PAIRS = 1
 TESTS_TO_RUN =[(0,0),(0,0),(0,0),(0,0)]

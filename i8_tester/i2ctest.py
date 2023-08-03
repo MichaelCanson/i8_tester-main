@@ -7,10 +7,11 @@ def main():
     i2c = m.I2c(2,True)
     io_addr= [0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f]
 
-    i2c.address(0x20)
+    i2c.address(0x23)
     trial = int(sys.argv[1])
     for t in range(trial):
         for i in io_addr:
+            print('writing {}'.format(i))
             i2c.write(bytearray([i,0xff]))
             time.sleep(1)
             
@@ -27,3 +28,6 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
+
+
+

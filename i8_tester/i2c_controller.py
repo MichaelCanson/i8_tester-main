@@ -9,7 +9,7 @@ import i2c_defs
 class Controller():
 
     def __init__(self):
-
+        
         self.i2c = mraa.I2c(i2c_defs.BUS_ADDR,True)
         self.current_addr = i2c_defs.I8_PAIR_ADDR[0]
         
