@@ -24,6 +24,11 @@ class Controller():
         print('current PCF Address: {}'.format(hex(self.current_addr)))
         self.i2c.address(self.current_addr)
 
+    def set_i2c_bus(self,ix):
+        self.i2c = mraa.I2c(i2c_defs.I2C_BUS_EXP_PAIR[ix][0], True)
+
+    def run_test(self,test_type,i8_ix, pcf_addr_ix, bus_addr_ix):
+        pass
 
     def set_open_delay(self,sec):
         self.delay = sec
