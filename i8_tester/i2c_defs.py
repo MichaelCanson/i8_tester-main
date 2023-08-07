@@ -11,12 +11,12 @@ BUS_ADDR = 0x01
 I8_PAIR_ADDR =  [0x21,0x22]
 WORD_REG = [[0xff,0xff],[0xff,0xff],[0xff,0xff],[0xff,0xff]] 
 I0_ADDR = [0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f]
-
-ACTIVE_DELAY = 5
-ACTIVE_DURATION = 10
+I0_ADDR_1 = [0x7e, 0xbd, 0xdb, 0xe7]
+ACTIVE_DELAY = 3
+ACTIVE_DURATION = 8
 SEQ = 0
 RAND_PAIRS = 1
-TESTS_TO_RUN =[(0,0),(0,0),(0,0),(0,0)]
+TESTS_TO_RUN =[(1,1),(1,1),(1,1),(1,1)]
 
 FILE_PATH = '/home/kampr/i8_tester-main/i8_tester/logs'
 CSV_PATH = '/home/kampr/i8_tester-main/i8_tester/logs/csv'

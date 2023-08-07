@@ -126,11 +126,64 @@ def main():
                                 time.sleep(i2c_defs.ACTIVE_DELAY)
 
                     elif test_type == 1:
-                        print('test type 1: addr_ix: {}'.format(addr_ix))
-                        #TODO
-                        '''
-                        2 inputs triggered at a time
-                        '''
+                       
+                        if not i8_pair_ix:
+                            print('\n---- i8.{} Test ----'.format(addr_ix + 1))
+                            for i in range(len(i2c_defs.I0_ADDR_1)):
+                                
+                                controller.word_reg[addr_ix][0] = i2c_defs.I0_ADDR_1[i]
+                                controller.word_reg[addr_ix][1] = i2c_defs.DISABLE_i8
+                                controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],i))
+                                
+                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],(len(i2c_defs.I0_ADDR)- 1 - i)))
+
+                                logging.info('{0:X}: input {1} ACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix], i))
+                                logging.info('{0:X}: input {1} ACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],(len(i2c_defs.I0_ADDR)- 1 - i)))
+                                
+                                time.sleep(i2c_defs.ACTIVE_DURATION)
+
+                                controller.word_reg[addr_ix][0] = i2c_defs.DISABLE_i8
+                                controller.word_reg[addr_ix][1] = i2c_defs.DISABLE_i8
+                                controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+
+                                logging.info('{0:X}: input {1} INACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix], i))
+                                logging.info('{0:X}: input {1} INACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],(len(i2c_defs.I0_ADDR)- 1 - i)))
+
+                                time.sleep(i2c_defs.ACTIVE_DELAY)
+                        else:
+                            print('\n---- i8.{} Test ----'.format(addr_ix + 2))
+                            for i in range(len(i2c_defs.I0_ADDR_1)):
+                                controller.word_reg[addr_ix][0] = i2c_defs.DISABLE_i8
+                                controller.word_reg[addr_ix][1] = i2c_defs.I0_ADDR_1[i]
+                                controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],10 + i))
+                                
+                                logging.info('{0:X}: input {1} ACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix], i))
+                                logging.info('{0:X}: input {1} ACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],(len(i2c_defs.I0_ADDR) - 1- i)))
+                                
+                                time.sleep(i2c_defs.ACTIVE_DURATION)
+
+                                controller.word_reg[addr_ix][0] = i2c_defs.DISABLE_i8
+                                controller.word_reg[addr_ix][1] = i2c_defs.DISABLE_i8
+                                controller.i2c.write(bytearray(controller.word_reg[addr_ix]))
+
+                                logging.info('{0:X}: input {1} INACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix], i))
+                                logging.info('{0:X}: input {1} INACTIVE,'
+                                    .format(i2c_defs.I8_PAIR_ADDR[addr_ix],(len(i2c_defs.I0_ADDR)- 1 - i)))
+
+                                time.sleep(i2c_defs.ACTIVE_DELAY)
+                        
                     logging.info('---,---,END OF TEST #{} Trial: {}'
                         .format(test_type,curr_count))
 
