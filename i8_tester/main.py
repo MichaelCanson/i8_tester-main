@@ -16,18 +16,18 @@ import i2c_defs
 
 
 def main():
-    if sys.argv[1] == '-bus':
-        bus_addr_ix = int(sys.argv[2])
-        i2c_defs.BUS_ADDR = bus_addr_ix
-        print('bus_addr_ix: {}'.format(bus_addr_ix))
-        controller = Controller()
-    else:
-        print('ERROR: missing args: bus address.')
-        return 0
+    # if sys.argv[1] == '-bus':
+    #     bus_addr_ix = int(sys.argv[2])
+    #     i2c_defs.BUS_ADDR = bus_addr_ix
+    #     print('bus_addr_ix: {}'.format(bus_addr_ix))
+    #     controller = Controller()
+    # else:
+    #     print('ERROR: missing args: bus address.')
+    #     return 0
          
-    if sys.argv[3] == '-n':
-        print("number of trials to run: ", sys.argv[4])    
-        trials = int(sys.argv[4])
+    if sys.argv[1] == '-n':
+        print("number of trials to run: ", sys.argv[2])    
+        trials = int(sys.argv[2])
     else:
         trials = 500000
     
@@ -53,145 +53,27 @@ def main():
 # ----------------- Test Configurations -------------------------
     test_type = i2c_defs.TESTS_TO_RUN[0][0]
     loop_count = trials
+    controller = Controller()
     while trials:
         print('Trial {} started'.format(trials))
         curr_count = loop_count - trials
-        i8_count = 0
+        
         for test_ix in range(len(i2c_defs.TESTS_TO_RUN)):
                 print('Test to run ix: {}'.format(test_ix))
 
-                bus_addr_ix = i2c_defs[test_ix][0]
+                bus_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0]
                 controller.set_i2c_bus(bus_addr_ix)
 
                 #set pcf address
-                pcf_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1]
-                controller.set_pcf_address(pcf_addr_ix)
-
+                # pcf_addr = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1]
+                controller.set_pcf_address(test_ix,1)
 
 
                 for i8_ix in range(2):
-                    i8_count += 1
-                    print('i8_count: {}'.format(i8_count))
-                    test_type = i2c_defs.TESTS_TO_RUN[test_ix][i8_ix]
-                    logging.info('---,---,TEST #{} Trial:{} '
-                    .format(test_type,curr_count))
-                    '''
-                    Verify which i8 is to be triggered within the ones
-                    configured in current pcf address
-                    '''
-                    if test_type == 0:
-                        if not i8_ix:
-                            print('\n---- i8.{} Test ----'.format(pcf_addr_ix + 1))
-                            for i in range(len(i2c_defs.TEST0)):
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.TEST0[i]
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
-                                    .format(i2c_defs.I8_PAIR_ADDR[pcf_addr_ix],i))
-                                    
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                             .format((test_ix * 2) + i8_ix + 1, i))
-                                
-                                time.sleep(i2c_defs.ACTIVE_DURATION)
-
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                             .format((test_ix * 2) + i8_ix + 1, i))
-
-                                time.sleep(i2c_defs.ACTIVE_DELAY)
-                        
-
-                        else:
-                            print('\n---- i8.{} Test ----'.format(pcf_addr_ix + 2))
-                            for i in range(len(i2c_defs.TEST0)):
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.TEST0[i]
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
-                                    .format(i2c_defs.I8_PAIR_ADDR[pcf_addr_ix],10 + i))
-                                
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                             .format((test_ix * 2) + i8_ix + 1, i))
-                                
-                                time.sleep(i2c_defs.ACTIVE_DURATION)
-
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                             .format((test_ix * 2) + i8_ix + 1, i))
-
-                                time.sleep(i2c_defs.ACTIVE_DELAY)
-
-                    elif test_type == 1:
-                       
-                        if not i8_ix:
-                            print('\n---- i8.{} Test ----'.format(pcf_addr_ix + 1))
-                            for i in range(len(i2c_defs.TEST1)):
-                                
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.TEST1[i]
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
-                                    .format(i2c_defs.I8_PAIR_ADDR[pcf_addr_ix],i))
-                                
-                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
-                                    .format(i2c_defs.I8_PAIR_ADDR[pcf_addr_ix],(len(i2c_defs.TEST1)- 1 - i)))
-
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1, i))
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1,i))
-                                
-                                time.sleep(i2c_defs.ACTIVE_DURATION)
-
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1, i))
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                    .format(i(test_ix * 2) + i8_ix + 1,i))
-
-                                time.sleep(i2c_defs.ACTIVE_DELAY)
-                        else:
-                            print('\n---- i8.{} Test ----'.format(pcf_addr_ix + 2))
-                            for i in range(len(i2c_defs.TEST1)):
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.TEST1[i]
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-                                print('PCF ADDR: 0x{0:X} Output: {1} enabled'
-                                    .format(i2c_defs.I8_PAIR_ADDR[pcf_addr_ix],10 + i))
-                                
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1, i))
-                                logging.info('{0:X}: input {1} ACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1,i))
-                                
-                                time.sleep(i2c_defs.ACTIVE_DURATION)
-
-                                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                                controller.i2c.write(bytearray(controller.word_reg[pcf_addr_ix]))
-
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1, i))
-                                logging.info('{0:X}: input {1} INACTIVE,'
-                                    .format((test_ix * 2) + i8_ix + 1, i))
-
-                                time.sleep(i2c_defs.ACTIVE_DELAY)
-                        
-                    logging.info('---,---,END OF TEST #{} Trial: {}'
-                        .format(test_type,curr_count))
+                    controller.run_test(test_type,test_ix,i8_ix,curr_count)
 
                 #Reset
-                controller.word_reg[pcf_addr_ix][0] = i2c_defs.DISABLE_i8
-                controller.word_reg[pcf_addr_ix][1] = i2c_defs.DISABLE_i8
-                controller.i2c.write(bytearray([controller.word_reg[pcf_addr_ix][0],\
-                                        controller.word_reg[pcf_addr_ix][1]]))       
+                controller.reset_test(test_ix)      
         trials -= 1
         #---------------------------------------------------------------
 
