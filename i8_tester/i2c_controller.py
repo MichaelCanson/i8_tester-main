@@ -43,6 +43,7 @@ class Controller():
         if test_type == i2c_defs.TEST0:
             logging.info('---,---,TEST #0 Trial:{} '
                     .format(trial_count))
+            i8_ix = 1
             if not i8_ix:
                 print('\n---- i8.{} Test ----'.format(test_ix + 1))
                 for i in range(len(i2c_defs.TEST0)):
@@ -91,6 +92,7 @@ class Controller():
         elif test_type == i2c_defs.TEST1:
             logging.info('---,---,TEST #1 Trial:{} '
                     .format(trial_count))
+            i8_ix = 1
             if not i8_ix:
                 print('\n---- i8.{} Test ----'.format(test_ix + 1))
                 for i in range(len(i2c_defs.TEST1)):

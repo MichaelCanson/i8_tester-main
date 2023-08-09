@@ -2,6 +2,7 @@
 Copyright(c) 2023 Marquis Systems Inc.
 
 '''
+import cv2
 import sys
 import os
 import time
@@ -16,14 +17,6 @@ import i2c_defs
 
 
 def main():
-    # if sys.argv[1] == '-bus':
-    #     bus_addr_ix = int(sys.argv[2])
-    #     i2c_defs.BUS_ADDR = bus_addr_ix
-    #     print('bus_addr_ix: {}'.format(bus_addr_ix))
-    #     controller = Controller()
-    # else:
-    #     print('ERROR: missing args: bus address.')
-    #     return 0
          
     if sys.argv[1] == '-n':
         print("number of trials to run: ", sys.argv[2])    
@@ -54,7 +47,19 @@ def main():
     test_type = i2c_defs.TESTS_TO_RUN[0][0]
     loop_count = trials
     controller = Controller()
+    # img = cv2.imread(i2c_defs.WINDOW_IMG)
+
+    # cv2.imshow('i8 Tester',img)
+    
     while trials:
+        # if cv2.waitKey(1) == ord('q'):
+        #     break
+        
+        # if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:        
+        #     break      
+
+        
+        
         print('Trial {} started'.format(trials))
         curr_count = loop_count - trials
         
