@@ -47,38 +47,37 @@ def main():
     test_type = i2c_defs.TESTS_TO_RUN[0][0]
     loop_count = trials
     controller = Controller()
-    # img = cv2.imread(i2c_defs.WINDOW_IMG)
+    img = cv2.imread(i2c_defs.WINDOW_IMG)
+    cv2.namedWindow("i8 Tester", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("i8 Tester", 300, 300)
+    cv2.imshow('i8 Tester', img)
 
-    # cv2.imshow('i8 Tester',img)
-    
     while trials:
-        # if cv2.waitKey(1) == ord('q'):
-        #     break
-        
-        # if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:        
-        #     break      
-
-        
-        
+                
         print('Trial {} started'.format(trials))
         curr_count = loop_count - trials
         
         for test_ix in range(len(i2c_defs.TESTS_TO_RUN)):
-                print('Test to run ix: {}'.format(test_ix))
 
-                bus_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0]
-                controller.set_i2c_bus(bus_addr_ix)
+            if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:
+                    if cv2.waitKey(0) == ord('q'):
+                        print('q was pressed.')
+                        break
+                    print('Test to run ix: {}'.format(test_ix))
 
-                #set pcf address
-                # pcf_addr = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1]
-                controller.set_pcf_address(test_ix,1)
+                    bus_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0]
+                    controller.set_i2c_bus(bus_addr_ix)
+
+                    #set pcf address
+                    # pcf_addr = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1]
+                    controller.set_pcf_address(test_ix,1)
 
 
-                for i8_ix in range(2):
-                    controller.run_test(test_type,test_ix,i8_ix,curr_count)
+                    for i8_ix in range(i2c_defs.NUM_OF_I8_PER_PCF):
+                        controller.run_test(test_type,test_ix,i8_ix,curr_count)
 
-                #Reset
-                controller.reset_test(test_ix)      
+                    #Reset
+                    controller.reset_test(test_ix)      
         trials -= 1
         #---------------------------------------------------------------
 
@@ -91,6 +90,7 @@ def main():
             writer.writerow(('Timestamp','iSTAR i8','Input Port'))
             writer.writerows(lines)
     print('test_ix trials has been completed.')
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     sys.exit(main())
