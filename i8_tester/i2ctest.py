@@ -4,25 +4,29 @@ import time
 
 
 def main():
-    i2c = m.I2c(2,True)
+    i2c = m.I2c(0,True)
     io_addr= [0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f]
 
-    i2c.address(0x23)
+    i2c.address(0x22)
     trial = int(sys.argv[1])
-    for t in range(trial):
-        for i in io_addr:
-            print('writing {}'.format(i))
-            i2c.write(bytearray([i,0xff]))
-            time.sleep(1)
+    # for t in range(trial):
+    #     i2c.write(bytearray([0xff,0xff]))
+
+    #     # for i in io_addr:
+    #     #     print('writing {}'.format(i))
+    #     #     i2c.write(bytearray([i,0xff]))
+    #     time.sleep(2)
+    #     i2c.write(bytearray([0x00,0x00]))
+
             
     i2c.write(bytearray([0xff,0xff]))
-    # for i in range(trial):
-    #     i2c.write(bytearray([0x00,0x00]))
-    #     print('PFC Board all ON')
-    #     time.sleep(3)
-    #     i2c.write(bytearray([0xff,0xff]))
-    #     print('PCF Board all OFF')
-    #     time.sleep(3)
+    for i in range(trial):
+        i2c.write(bytearray([0x00,0x00]))
+        print('PFC Board all ON')
+        time.sleep(3)
+        i2c.write(bytearray([0xff,0xff]))
+        print('PCF Board all OFF')
+        time.sleep(3)
 
     print('Test done.')
 

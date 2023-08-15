@@ -43,7 +43,7 @@ class Controller():
         if test_type == i2c_defs.TEST0:
             logging.info('---,---,TEST #0 Trial:{} '
                     .format(trial_count))
-            i8_ix = 1
+            # i8_ix = 1
             if not i8_ix:
                 print('\n---- i8.{} Test ----'.format(test_ix + 1))
                 for i in range(len(i2c_defs.TEST0)):
@@ -92,7 +92,7 @@ class Controller():
         elif test_type == i2c_defs.TEST1:
             logging.info('---,---,TEST #1 Trial:{} '
                     .format(trial_count))
-            i8_ix = 1
+            # i8_ix = 1
             if not i8_ix:
                 print('\n---- i8.{} Test ----'.format(test_ix + 1))
                 for i in range(len(i2c_defs.TEST1)):
@@ -154,6 +154,18 @@ class Controller():
                         .format((test_ix * 2) + i8_ix + 1, (len(i2c_defs.TEST1) + 1 + i)))
 
                     time.sleep(i2c_defs.ACTIVE_DELAY)
+
+
+        elif test_type == i2c_defs.TEST2:
+            logging.info('---,---,TEST #2 Trial:{} '
+                    .format(trial_count))
+            
+            # i8_ix = 1
+            if not i8_ix:
+                pass
+            else:
+                print('\n---- i8.{} Test ----'.format(test_ix + 2))
+                
             
     def reset_test(self,test_ix):
         self.word_reg[test_ix][0] = i2c_defs.DISABLE_i8

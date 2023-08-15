@@ -11,7 +11,7 @@ from datetime import  date
 from binascii import hexlify 
 from random import choice, choices, randrange
 import logging
-from pynput import keyboard
+# from pynput import keyboard
 from i2c_controller import Controller
 import i2c_defs
 
