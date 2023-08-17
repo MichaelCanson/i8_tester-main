@@ -22,7 +22,6 @@ class Controller():
 
     def set_pcf_address(self, bus_addr_ix, ix):
         print('bus_addr_ix: {}'.format(bus_addr_ix))
-        print('test_ix: {}'.format(ix))
 
         self.current_addr = i2c_defs.I2C_BUS_EXP_PAIR[bus_addr_ix][ix]
         res = self.i2c.address(self.current_addr)

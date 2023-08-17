@@ -11,7 +11,6 @@ from datetime import  date
 from binascii import hexlify 
 from random import choice, choices, randrange
 import logging
-from pynput import keyboard
 from i2c_controller import Controller
 import i2c_defs
 
@@ -47,22 +46,21 @@ def main():
     test_type = i2c_defs.TESTS_TO_RUN[0][0]
     loop_count = trials
     controller = Controller()
-    img = cv2.imread(i2c_defs.WINDOW_IMG)
-    cv2.namedWindow("i8 Tester", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("i8 Tester", 300, 300)
-    cv2.imshow('i8 Tester', img)
+    # img = cv2.imread(i2c_defs.WINDOW_IMG)
+    # cv2.namedWindow("i8 Tester", cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow("i8 Tester", 300, 300)
+    # cv2.imshow('i8 Tester', img)
 
     while trials:
-                
-        print('Trial {} started'.format(trials))
-        curr_count = loop_count - trials
+        curr_count = loop_count - trials                
+        print('{} of {} Trials started'.format(curr_count,trials))
         
         for test_ix in range(len(i2c_defs.TESTS_TO_RUN)):
 
-            if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:
-                    if cv2.waitKey(0) == ord('q'):
-                        print('q was pressed.')
-                        break
+            # if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:
+            #         if cv2.waitKey(0) == ord('q'):
+            #             print('q was pressed.')
+            #             break
                     print('Test to run ix: {}'.format(test_ix))
 
                     bus_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0]
