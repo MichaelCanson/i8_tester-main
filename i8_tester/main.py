@@ -43,40 +43,28 @@ def main():
 # ---------------------------------------------------------------
     
 # ----------------- Test Configurations -------------------------
-    test_type = i2c_defs.TESTS_TO_RUN[0][0]
     loop_count = trials
     controller = Controller()
-    # img = cv2.imread(i2c_defs.WINDOW_IMG)
-    # cv2.namedWindow("i8 Tester", cv2.WINDOW_NORMAL)
-    # cv2.resizeWindow("i8 Tester", 300, 300)
-    # cv2.imshow('i8 Tester', img)
 
     while trials:
         curr_count = loop_count - trials                
         print('{} of {} Trials started'.format(curr_count,trials))
+        logging.info('---,---,TEST Trial:{} '
+                    .format(curr_count))
+        controller.activate_inputs()
+
+        time.sleep(i2c_defs.ACTIVE_DURATION)
+
+        controller.deactivate_inputs()
+
+        time.sleep(i2c_defs.ACTIVE_DELAY)
+
+        logging.info('---,---,End of TEST Trial:{} '
+                    .format(curr_count))
         
-        for test_ix in range(len(i2c_defs.TESTS_TO_RUN)):
-
-            # if cv2.getWindowProperty('img',cv2.WND_PROP_VISIBLE) < 1:
-            #         if cv2.waitKey(0) == ord('q'):
-            #             print('q was pressed.')
-            #             break
-                    print('Test to run ix: {}'.format(test_ix))
-
-                    bus_addr_ix = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0]
-                    controller.set_i2c_bus(bus_addr_ix)
-
-                    #set pcf address
-                    # pcf_addr = i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1]
-                    controller.set_pcf_address(test_ix,1)
-
-
-                    for i8_ix in range(i2c_defs.NUM_OF_I8_PER_PCF):
-                        controller.run_test(test_type,test_ix,i8_ix,curr_count)
-
-                    #Reset
-                    controller.reset_test(test_ix)      
         trials -= 1
+    logging.info('---,---,End of TEST Trial:{} '
+                    .format(curr_count))
         #---------------------------------------------------------------
 
     csv_log = '{}/{}.csv'.format(i2c_defs.CSV_PATH,i2c_defs.LOG_TITLE)
