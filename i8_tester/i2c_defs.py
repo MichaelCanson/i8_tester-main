@@ -10,9 +10,8 @@ BUS_ADDR = 0x01
 I2C_BUS_EXP_PAIR = [(0x01,0x20), (0x01,0x21),\
                     (0x00,0x22), (0x00,0x23)]
 
-I8_PAIR_ADDR =  [0x21,0x22]
-WORD_REG = [[0xff,0xff],[0xff,0xff],
-            [0xff,0xff],[0xff,0xff]]
+WORD_REG = [(0xff,0xff),(0xff,0xff),
+            (0xff,0xff),(0xff,0xff)]
 NUM_OF_I8_PER_PCF = 2
 ACTIVE_DELAY = 5
 ACTIVE_DURATION = 8
@@ -23,9 +22,11 @@ ACTIVE_DURATION = 8
 #TEST2 = [0x3c, 0xc3] # 4 inputs active within the same pcf
 #TEST3 = [0x7e, 0x7e, 0x7e, 0x7e] # 2 inputs triggered for each pcf
 TEST1 = 0x7e 
+TEST2 = 0x55
 TEST3 = 0x3c
+TEST4 = 0xAA
 
-TESTS_TO_RUN = [(TEST1,TEST1),(TEST1,TEST1), (TEST3,TEST3),(TEST3,TEST3)
+TESTS_TO_RUN = [(TEST1,TEST1),(TEST1,TEST1), (TEST2,TEST2),(TEST2,TEST2)
                 
 
 
