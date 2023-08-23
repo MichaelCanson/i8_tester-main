@@ -63,8 +63,7 @@ def main():
                     .format(curr_count))
         
         trials -= 1
-    logging.info('---,---,End of TEST Trial:{} '
-                    .format(curr_count))
+    logging.info('---,---,Test Completed.')
         #---------------------------------------------------------------
 
     csv_log = '{}/{}.csv'.format(i2c_defs.CSV_PATH,i2c_defs.LOG_TITLE)

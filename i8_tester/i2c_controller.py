@@ -37,30 +37,36 @@ class Controller():
        
     def activate_inputs(self):
         for test_ix in range(len(i2c_defs.I2C_BUS_EXP_PAIR)):
-            time.sleep(0.005)
             self.set_i2c_bus(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0])
-            time.sleep(0.005)
             self.set_pcf_address(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1])
+            time.sleep(0.005)
 
-            for i8_ix in range(2):
-                self.word_reg[test_ix][0] = i2c_defs.TESTS_TO_RUN[test_ix][i8_ix]
-                self.word_reg[test_ix][1] = i2c_defs.TESTS_TO_RUN[test_ix][i8_ix]
-                self.i2c.write(bytearray(self.word_reg[test_ix]))
-                self.log_inputs(test_ix, i8_ix, i2c_defs.TESTS_TO_RUN[test_ix][i8_ix], "ACTIVE")
+            
+            self.word_reg[test_ix][0] = i2c_defs.TESTS_TO_RUN[test_ix][0]
+            self.word_reg[test_ix][1] = i2c_defs.TESTS_TO_RUN[test_ix][1]
+            self.i2c.write(bytearray(self.word_reg[test_ix]))
+            time.sleep(0.005)
+            self.log_inputs(test_ix, 0,\
+                                i2c_defs.TESTS_TO_RUN[test_ix][0], "ACTIVE")
+            self.log_inputs(test_ix, 1,\
+                                i2c_defs.TESTS_TO_RUN[test_ix][1], "ACTIVE")
 
 
     def deactivate_inputs(self):
         for test_ix in range(len(i2c_defs.I2C_BUS_EXP_PAIR)):
-            time.sleep(0.005)
             self.set_i2c_bus(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0])
-            time.sleep(0.005)
             self.set_pcf_address(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1])
+            time.sleep(0.005)
 
-            for i8_ix in range(2):
-                self.word_reg[test_ix][0] = i2c_defs.DISABLE_i8
-                self.word_reg[test_ix][1] = i2c_defs.DISABLE_i8
-                self.i2c.write(bytearray(self.word_reg[test_ix]))
-                self.log_inputs(test_ix, i8_ix ,i2c_defs.TESTS_TO_RUN[test_ix][i8_ix], "INACTIVE")
+            
+            self.word_reg[test_ix][0] = i2c_defs.DISABLE_i8
+            self.word_reg[test_ix][1] = i2c_defs.DISABLE_i8
+            self.i2c.write(bytearray(self.word_reg[test_ix]))
+            time.sleep(0.005)
+            self.log_inputs(test_ix, 0,\
+                            i2c_defs.TESTS_TO_RUN[test_ix][0], "INACTIVE")
+            self.log_inputs(test_ix, 1,\
+                            i2c_defs.TESTS_TO_RUN[test_ix][1], "INACTIVE")
 
 
     def reset_test(self,test_ix):
