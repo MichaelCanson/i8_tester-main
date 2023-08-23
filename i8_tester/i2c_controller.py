@@ -38,6 +38,7 @@ class Controller():
     def activate_inputs(self):
         for test_ix in range(len(i2c_defs.I2C_BUS_EXP_PAIR)):
             self.set_i2c_bus(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0])
+            time.sleep(0.005)
             self.set_pcf_address(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1])
             time.sleep(0.005)
 
@@ -55,6 +56,7 @@ class Controller():
     def deactivate_inputs(self):
         for test_ix in range(len(i2c_defs.I2C_BUS_EXP_PAIR)):
             self.set_i2c_bus(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][0])
+            time.sleep(0.005)
             self.set_pcf_address(i2c_defs.I2C_BUS_EXP_PAIR[test_ix][1])
             time.sleep(0.005)
 
