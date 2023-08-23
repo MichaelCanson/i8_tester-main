@@ -4,7 +4,7 @@ import csv
 import sys
 
 def main():
-    log_title = '2023-08-15(7)'
+    log_title = '2023-08-21(34)'
     test_log = '{}/{}.txt'.format(i2c_defs.FILE_PATH,log_title)
     
     csv_log = '{}/{}.csv'.format(i2c_defs.CSV_PATH,log_title)
